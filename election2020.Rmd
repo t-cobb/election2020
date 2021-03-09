@@ -1,0 +1,12 @@
+---
+title: "Election 2020"
+author: "Trevor Cobb"
+date: "3/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
