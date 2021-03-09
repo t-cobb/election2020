@@ -7,6 +7,50 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(rstanarm)
 ```
+
+
+```{r read_in}
+
+x <- read_csv("raw_data/results.csv", skip = 1) %>%
+   mutate(biden_won = if_else(Biden > Trump, 1, 0)) %>%
+  select(CD, Party, Biden, Trump, biden_won) 
+
+```
+
+```{r small}
+# set.seed sets the random sample at row 10 so our results look the same
+
+set.seed(10)
+small <- x %>%
+  slice_sample(n = 50)
+
+```
+
+
+```{r}
+
+# what's the thing on the left side? that goes into formula 
+# ~ splits left from right
+# look closely at 7.1 and 7.3 of the chapter
+# family = binormial is saying we recognize the left variable is a true / false or binary variable
+# refresh = 0 is to hide all the diagnostics
+
+fit_1 <- stan_glm(formula = biden_won ~ 1,
+         data = small,
+         family = binomial,
+         refresh = 0,
+         seed = 76)
+
+```
+
+Representativeness: is small representative of the entire population? 
+
+population: 435 districts
+Random samples are representative of the population from which they are drawn
+Every 7th row or some consistent process may be representative, but not as valid as true random
+If someone selects (all the poor districts or rich districts) then it's not -- this is correlated 
 
 
